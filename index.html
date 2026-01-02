@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Camera Access</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #password-form {
+            margin-bottom: 20px;
+        }
+        #camera-container {
+            display: none;
+            margin-top: 20px;
+        }
+        video {
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Access Mobile Camera</h1>
+
+    <div id="password-form">
+        <label for="password">Enter Password: </label>
+        <input type="password" id="password" placeholder="Enter password" />
+        <button onclick="checkPassword()">Submit</button>
+    </div>
+
+    <div id="camera-container" class="hidden">
+        <h2>Camera Access Granted</h2>
+        <video id="video" autoplay></video>
+    </div>
+
+    <script>
+        const correctPassword = '1234'; // Replace with your desired password
+        const cameraContainer = document.getElementById('camera-container');
+        const passwordForm = document.getElementById('password-form');
+        const videoElement = document.getElementById('video');
+
+        // Function to check the password
+        function checkPassword() {
+            const passwordInput = document.getElementById('password').value;
+
+            if (passwordInput === correctPassword) {
+                // Hide the password form and show the camera
+                passwordForm.classList.add('hidden');
+                cameraContainer.classList.remove('hidden');
+
+                // Try to access the front camera
+                startCamera();
+            } else {
+                alert('Incorrect password, try again!');
+            }
+        }
+
+        // Function to start the camera
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+                .then((stream) => {
+                    videoElement.srcObject = stream;
+                })
+                .catch((error) => {
+                    alert('Unable to access camera: ' + error.message);
+                });
+        }
+    </script>
+
+</body>
+</html>
